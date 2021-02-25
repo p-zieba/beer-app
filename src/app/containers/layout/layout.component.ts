@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BeerCatalogComponent } from 'src/app/components/beer-catalog/beer-catalog.component';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { OptionsService } from 'src/app/services/options.service';
 
 @Component({
   selector: 'app-layout',
@@ -9,38 +9,31 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 })
 export class LayoutComponent implements OnInit {
 
-  isDarkLayoutMode: boolean = false;
+  isDarkLayoutMode: boolean;
   sortAttribute: string = 'name';
-  beersPerLoad: string = '15';
+  beersPerLoad: string;
   @ViewChild('catalog1') catalog1: BeerCatalogComponent | undefined;
   @ViewChild('catalog2') catalog2: BeerCatalogComponent | undefined;
   @ViewChild('catalog3') catalog3: BeerCatalogComponent | undefined;
 
-  constructor(private el: ElementRef, private localStorageService: LocalStorageService) { }
-
-  ngOnInit(): void {
-    const isDarkLayoutModeLocalStorage = this.localStorageService.getItem('isDarkLayoutMode');
-    if (!isDarkLayoutModeLocalStorage) {
-      this.localStorageService.setItem('isDarkLayoutMode', 'false');
-    } else {
-      this.isDarkLayoutMode = isDarkLayoutModeLocalStorage === 'true' ? true : false;
-      this.updateLayout();
-    }
-
-    const beersPerLoadFromLocalStorage = this.localStorageService.getItem('beersPerLoad');
-    if (!beersPerLoadFromLocalStorage) {
-      this.localStorageService.setItem('beersPerLoad', '15');
-    } else {
-      this.beersPerLoad = beersPerLoadFromLocalStorage;
-    }
+  constructor(
+    private el: ElementRef,
+    private optionsService: OptionsService
+  ) {
+    this.isDarkLayoutMode = this.optionsService.isDarkLayoutMode();
+    this.beersPerLoad = this.optionsService.getBeersPerLoad();
   }
 
-  onChangeLayout(): void {
-    this.localStorageService.setItem('isDarkLayoutMode', String(this.isDarkLayoutMode));
+  ngOnInit(): void {
     this.updateLayout();
   }
 
-  updateLayout(): void {
+  onChangeLayout(): void {
+    this.optionsService.setDarkLayoutMode(this.isDarkLayoutMode);
+    this.updateLayout();
+  }
+
+  private updateLayout(): void {
     let content = this.el.nativeElement.querySelector("#content");
     if (!this.isDarkLayoutMode) {
       content.classList.remove('dark-layout');
@@ -56,7 +49,7 @@ export class LayoutComponent implements OnInit {
   }
 
   onChangeBeersPerLoad(): void {
-    this.localStorageService.setItem('beersPerLoad', this.beersPerLoad);
+    this.optionsService.setBeersPerLoad(this.beersPerLoad);
   }
 
 }

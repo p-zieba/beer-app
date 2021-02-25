@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Beer } from 'src/app/defs/beer';
+import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { OptionsService } from 'src/app/services/options.service';
 import { Utils } from 'src/app/utils/utils';
 
 @Component({
@@ -21,11 +23,12 @@ export class BeerCatalogComponent implements OnInit {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private http: HttpClient
+    private dataService: DataService,
+    private optionsService: OptionsService
   ) { }
 
   ngOnInit(): void {
-    this.http.get<any[]>('/beers')
+    this.dataService.fetchBeers()
       .subscribe((data) => {
         data.forEach(item => {
           const beer: Beer = {
@@ -68,7 +71,7 @@ export class BeerCatalogComponent implements OnInit {
   }
 
   loadMore(): void {
-    const beersPerLoad = this.localStorageService.getItem('beersPerLoad');
+    const beersPerLoad = this.optionsService.getBeersPerLoad();
     this.displayedBeers = this.displayedBeers.concat(this.undisplayedBeers.splice(0, Number(beersPerLoad)));
     this.isMore = this.undisplayedBeers.length > 0;
   }
