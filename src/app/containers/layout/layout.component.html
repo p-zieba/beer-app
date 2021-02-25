@@ -73,6 +73,9 @@
                         Layout</label>
                 </div>
                 <hr>
+                <label>Beers per load</label><br>
+                <input [(ngModel)]="beersPerLoad" (change)="onChangeBeersPerLoad()" type="number">
+                <hr>
                 <label>Sort Attribute</label>
                 <select [(ngModel)]="sortAttribute" class="form-select" (change)="onChangeSortAttribute()">
                     <option value="name">name</option>

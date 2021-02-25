@@ -23,7 +23,7 @@
                     <td>{{ beer.type }}</td>
                     <td>{{ beer.price }}</td>
                     <td>
-                        <img alt="" [src]="beer.imageUrl" style="border-radius: 40px; height: 40px;" data-bs-toggle="modal" attr.data-bs-target="#beer-{{ beer.id }}">
+                        <img alt="" [src]="beer.imageUrl" style="border-radius: 40px; cursor: pointer; height: 40px;" data-bs-toggle="modal" attr.data-bs-target="#beer-{{ beer.id }}">
                         <div class="modal fade" id="beer-{{ beer.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="text-center" style="width: 100%;"><img [src]="beer.imageUrl" alt=""></div>
@@ -33,6 +33,10 @@
                 </tr>
             </tbody>
         </table>
+
+        <div *ngIf="isMore" class="text-center">
+            <button class="btn btn-sm btn-primary" (click)="loadMore()">Load more</button>
+        </div>
 
         <p *ngIf="!selectedBrewer" class="text-center">No Brewer Selected.</p>
     </div>

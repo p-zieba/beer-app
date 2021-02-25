@@ -11,6 +11,7 @@ export class LayoutComponent implements OnInit {
 
   isDarkLayoutMode: boolean = false;
   sortAttribute: string = 'name';
+  beersPerLoad: string = '15';
   @ViewChild('catalog1') catalog1: BeerCatalogComponent | undefined;
   @ViewChild('catalog2') catalog2: BeerCatalogComponent | undefined;
   @ViewChild('catalog3') catalog3: BeerCatalogComponent | undefined;
@@ -24,6 +25,13 @@ export class LayoutComponent implements OnInit {
     } else {
       this.isDarkLayoutMode = isDarkLayoutModeLocalStorage === 'true' ? true : false;
       this.updateLayout();
+    }
+
+    const beersPerLoadFromLocalStorage = this.localStorageService.getItem('beersPerLoad');
+    if (!beersPerLoadFromLocalStorage) {
+      this.localStorageService.setItem('beersPerLoad', '15');
+    } else {
+      this.beersPerLoad = beersPerLoadFromLocalStorage;
     }
   }
 
@@ -45,7 +53,10 @@ export class LayoutComponent implements OnInit {
     this.catalog1?.sortDisplayedBeersByAttribute(this.sortAttribute);
     this.catalog2?.sortDisplayedBeersByAttribute(this.sortAttribute);
     this.catalog3?.sortDisplayedBeersByAttribute(this.sortAttribute);
-    this.localStorageService.setItem('sortAttribute', this.sortAttribute);
+  }
+
+  onChangeBeersPerLoad(): void {
+    this.localStorageService.setItem('beersPerLoad', this.beersPerLoad);
   }
 
 }

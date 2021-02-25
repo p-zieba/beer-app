@@ -16,6 +16,8 @@ export class BeerCatalogComponent implements OnInit {
   brewers: string[] = [];
   selectedBrewer: string = '';
   displayedBeers: Beer[] = [];
+  undisplayedBeers: Beer[] = [];
+  isMore: boolean = false;
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -53,10 +55,22 @@ export class BeerCatalogComponent implements OnInit {
   }
 
   onChangeBrewer(): void {
-    this.displayedBeers = this.beers.filter(beer => beer.brewer === this.selectedBrewer);
+    this.undisplayedBeers = [];
+    this.displayedBeers = [];
+
+    this.undisplayedBeers = this.beers.filter(beer => beer.brewer === this.selectedBrewer);
+    Utils.sortArrayAlphabetically(this.undisplayedBeers);
+    
+    this.loadMore();
     if (this.catalogKey) {
       this.localStorageService.setItem(this.catalogKey, this.selectedBrewer);
     }
+  }
+
+  loadMore(): void {
+    const beersPerLoad = this.localStorageService.getItem('beersPerLoad');
+    this.displayedBeers = this.displayedBeers.concat(this.undisplayedBeers.splice(0, Number(beersPerLoad)));
+    this.isMore = this.undisplayedBeers.length > 0;
   }
 
   sortDisplayedBeersByAttribute(attributeName: string): void {
