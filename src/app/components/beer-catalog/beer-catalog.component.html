@@ -1,0 +1,39 @@
+<div class="card bg-secondary text-white shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <select [(ngModel)]="selectedBrewer" class="form-select" (change)="onChangeBrewer()">
+                <option value="">--- Choose Brewer ---</option>
+                <option *ngFor="let brewer of brewers" [value]="brewer">{{ brewer }}</option>
+            </select>
+        </h6>
+    </div>
+    <div class="card-body">
+        <table *ngIf="selectedBrewer" class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let beer of displayedBeers">
+                    <td>{{ beer.name }}</td>
+                    <td>{{ beer.type }}</td>
+                    <td>{{ beer.price }}</td>
+                    <td>
+                        <img alt="" [src]="beer.imageUrl" style="border-radius: 40px; height: 40px;" data-bs-toggle="modal" attr.data-bs-target="#beer-{{ beer.id }}">
+                        <div class="modal fade" id="beer-{{ beer.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="text-center" style="width: 100%;"><img [src]="beer.imageUrl" alt=""></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p *ngIf="!selectedBrewer" class="text-center">No Brewer Selected.</p>
+    </div>
+</div>
