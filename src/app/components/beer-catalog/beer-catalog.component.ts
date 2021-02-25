@@ -45,7 +45,7 @@ export class BeerCatalogComponent implements OnInit {
 
         this.brewers = Utils.removeDuplicates(this.brewers);
         Utils.sortArrayAlphabetically(this.brewers);
-        Utils.sortArrayAlphabeticallyByAttribute(this.beers, 'name');
+        Utils.sortArrayAlphabeticallyByAttribute(this.beers, this.optionsService.getSortAttribute());
 
         if (this.catalogKey) {
           const selectedBrewerFromLocalStorage = this.localStorageService.getItem(this.catalogKey);

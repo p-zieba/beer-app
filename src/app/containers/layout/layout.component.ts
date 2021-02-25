@@ -22,6 +22,7 @@ export class LayoutComponent implements OnInit {
   ) {
     this.isDarkLayoutMode = this.optionsService.isDarkLayoutMode();
     this.beersPerLoad = this.optionsService.getBeersPerLoad();
+    this.sortAttribute = this.optionsService.getSortAttribute();
   }
 
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class LayoutComponent implements OnInit {
     this.catalog1?.sortDisplayedBeersByAttribute(this.sortAttribute);
     this.catalog2?.sortDisplayedBeersByAttribute(this.sortAttribute);
     this.catalog3?.sortDisplayedBeersByAttribute(this.sortAttribute);
+    this.optionsService.setSortAttribute(this.sortAttribute);
   }
 
   onChangeBeersPerLoad(): void {
